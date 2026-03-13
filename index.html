@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Brød-planen | Hverdage</title>
+    <title>Brød-planen</title>
     <style>
         :root {
             --bg: #ffffff;
             --text: #1a1a1a;
-            --accent: #f3f3f3;
+            --accent: #f9f9f9;
             --today-bg: #fffbe6;
+            --today-border: #ffd43b;
             --border: #eeeeee;
         }
 
@@ -25,66 +26,44 @@
 
         .wrapper {
             width: 100%;
-            max-width: 400px;
+            max-width: 450px;
         }
 
         header {
             margin-bottom: 30px;
             text-align: center;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 20px;
         }
 
-        h1 {
-            font-size: 1.2rem;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            font-weight: 700;
-        }
+        h1 { font-size: 1.4rem; margin: 0; }
+        p { color: #888; font-size: 0.9rem; margin-top: 5px; }
 
-        .week-label {
-            font-size: 0.8rem;
-            color: #888;
-            margin: 20px 0 10px 5px;
-            font-weight: 600;
-        }
-
-        .list {
-            border-top: 1px solid var(--border);
-        }
+        .list { border-radius: 8px; overflow: hidden; }
 
         .row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px 10px;
+            padding: 18px 15px;
             border-bottom: 1px solid var(--border);
-            transition: background 0.2s;
         }
 
-        .row:hover {
-            background-color: var(--accent);
-        }
+        .date-box { display: flex; flex-direction: column; }
+        
+        .day-name { font-weight: 600; text-transform: capitalize; }
+        .date-sub { font-size: 0.8rem; color: #888; }
 
-        .date {
-            font-size: 0.9rem;
-            color: #666;
-            flex: 1;
-        }
+        .name { font-weight: 500; font-size: 1.1rem; }
 
-        .name {
-            font-weight: 500;
-            flex: 1;
-            text-align: right;
-        }
-
-        /* Markering af i dag */
         .today {
             background-color: var(--today-bg);
-            border-left: 4px solid #ffd43b;
+            border-left: 5px solid var(--today-border);
         }
-
-        .weekend-divider {
-            height: 20px;
-            background: #fafafa;
+        
+        .weekend-gap {
+            height: 15px;
+            background: #fdfdfd;
             border-bottom: 1px solid var(--border);
         }
     </style>
@@ -93,23 +72,67 @@
 
 <div class="wrapper">
     <header>
-        <h1>Morgenbrød 🥐</h1>
+        <h1>Brød-planen 🥐</h1>
+        <p>Hvem spreder glæde i dag?</p>
     </header>
 
-    <div class="week-label">UGE 1</div>
-    <div class="list">
-        <div class="row today">
-            <span class="date">Mandag</span>
-            <span class="name">Morten (I dag)</span>
+    <div id="bread-list" class="list">
         </div>
-        <div class="row">
-            <span class="date">Tirsdag</span>
-            <span class="name">Line</span>
-        </div>
-        <div class="row">
-            <span class="date">Onsdag</span>
-            <span class="name">Anders</span>
-        </div>
-        <div class="row">
-            <span class="date">Torsdag</span>
-            <span class="name">M
+</div>
+
+<script>
+    // 1. Skriv navnene på jeres brød-hold her (i rækkefølge)
+    const personListe = ["Morten", "Line", "Anders", "Mette", "Søren", "Katrine", "Jesper", "Lone", "Thomas", "Hanne"];
+
+    function genererPlan() {
+        const container = document.getElementById('bread-list');
+        let dato = new Date(); // Starter fra i dag
+        let fundneHverdage = 0;
+        let personIndex = 0;
+
+        while (fundneHverdage < 10) {
+            // Tjek om det er en hverdag (1-5 er mandag-fredag)
+            const ugedag = dato.getDay();
+            
+            if (ugedag !== 0 && ugedag !== 6) {
+                const erIdag = fundneHverdage === 0;
+                
+                // Formater datoen til dansk
+                const dagNavn = dato.toLocaleDateString('da-DK', { weekday: 'long' });
+                const datoStr = dato.toLocaleDateString('da-DK', { day: 'numeric', month: 'short' });
+
+                // Lav HTML-rækken
+                const row = document.createElement('div');
+                row.className = `row ${erIdag ? 'today' : ''}`;
+                
+                row.innerHTML = `
+                    <div class="date-box">
+                        <span class="day-name">${dagNavn}</span>
+                        <span class="date-sub">${datoStr}</span>
+                    </div>
+                    <div class="name">${personListe[personIndex % personListe.length]} ${erIdag ? '⭐' : ''}</div>
+                `;
+
+                container.appendChild(row);
+                
+                // Tilføj et lille mellemrum efter den første fredag (uge-skift)
+                if (ugedag === 5 && fundneHverdage < 9) {
+                    const gap = document.createElement('div');
+                    gap.className = 'weekend-gap';
+                    container.appendChild(gap);
+                }
+
+                personIndex++;
+                fundneHverdage++;
+            }
+            
+            // Gå til næste dag
+            dato.setDate(dato.getDate() + 1);
+        }
+    }
+
+    genererPlan();
+</script>
+
+</body>
+</html>
