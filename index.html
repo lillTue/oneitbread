@@ -1,1 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Test Website</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f7f7f7;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        header {
+            background: #4a90e2;
+            color: white;
+            width: 100%;
+            padding: 20px;
+            text-align: center;
+        }
+        main {
+            max-width: 800px;
+            background: white;
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        footer {
+            margin-top: 40px;
+            padding: 10px;
+            color: #666;
+        }
+        button {
+            padding: 10px 20px;
+            background: #4a90e2;
+            border: none;
+            border-radius: 4px;
+            color: white;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background: #3b7ac2;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>My Test Website</h1>
+    </header>
 
+    <main>
+        <h2>Welcome!</h2>
+        <p>This is a simple HTML website created for testing purposes.</p>
+
+        <button onclick="alert('Button clicked!')">Click me</button>
+    </main>
+
+    <footer>
+        <p>© 2026 Test Site</p>
+    </footer>
+</body>
+</html>
